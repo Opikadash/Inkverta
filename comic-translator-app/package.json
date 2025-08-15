@@ -1,0 +1,111 @@
+{
+  "name": "comic-translator-monorepo",
+  "version": "1.0.0",
+  "description": "Full-stack comic translator application with OCR and AI translation",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "install:all": "npm install && npm run install:backend && npm run install:frontend",
+    "install:backend": "cd backend && npm install",
+    "install:frontend": "cd frontend && npm install",
+    
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    
+    "build": "npm run build:backend && npm run build:frontend",
+    "build:backend": "cd backend && npm run build",
+    "build:frontend": "cd frontend && npm run build",
+    
+    "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
+    "start:backend": "cd backend && npm run start",
+    "start:frontend": "cd frontend && npm run preview",
+    
+    "test": "npm run test:backend && npm run test:frontend",
+    "test:backend": "cd backend && npm run test",
+    "test:frontend": "cd frontend && npm run test",
+    
+    "lint": "npm run lint:backend && npm run lint:frontend",
+    "lint:backend": "cd backend && npm run lint",
+    "lint:frontend": "cd frontend && npm run lint",
+    
+    "format": "npm run format:backend && npm run format:frontend",
+    "format:backend": "cd backend && npm run format",
+    "format:frontend": "cd frontend && npm run format",
+    
+    "docker:build": "docker-compose -f docker/docker-compose.yml build",
+    "docker:up": "docker-compose -f docker/docker-compose.yml up -d",
+    "docker:down": "docker-compose -f docker/docker-compose.yml down",
+    "docker:logs": "docker-compose -f docker/docker-compose.yml logs -f",
+    
+    "docker:dev": "docker-compose -f docker/docker-compose.dev.yml up",
+    "docker:dev:build": "docker-compose -f docker/docker-compose.dev.yml build",
+    
+    "docker:prod": "docker-compose -f deployment/docker-compose.prod.yml up -d",
+    "docker:prod:build": "docker-compose -f deployment/docker-compose.prod.yml build",
+    
+    "monitoring:up": "docker-compose -f monitoring/docker-compose.monitoring.yml up -d",
+    "monitoring:down": "docker-compose -f monitoring/docker-compose.monitoring.yml down",
+    
+    "setup": "chmod +x scripts/setup.sh && ./scripts/setup.sh",
+    "deploy": "chmod +x scripts/deploy.sh && ./scripts/deploy.sh",
+    "backup": "chmod +x scripts/backup.sh && ./scripts/backup.sh",
+    
+    "extension:build": "cd chrome-extension && npm run build",
+    "extension:package": "cd chrome-extension && npm run package",
+    
+    "clean": "npm run clean:backend && npm run clean:frontend && npm run clean:docker",
+    "clean:backend": "cd backend && rm -rf node_modules dist uploads logs temp",
+    "clean:frontend": "cd frontend && rm -rf node_modules dist",
+    "clean:docker": "docker system prune -f && docker volume prune -f",
+    
+    "health": "curl -f http://localhost:3001/api/health && curl -f http://localhost:3000",
+    "logs:backend": "tail -f backend/logs/combined.log",
+    "logs:error": "tail -f backend/logs/error.log"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "husky": "^8.0.3",
+    "lint-staged": "^14.0.1",
+    "prettier": "^3.0.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "backend/**/*.{js,json}": [
+      "cd backend && npm run lint --fix",
+      "cd backend && npm run format"
+    ],
+    "frontend/**/*.{js,jsx,json}": [
+      "cd frontend && npm run lint --fix",
+      "cd frontend && npm run format"
+    ]
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Opikadash/Inkverta.git"
+  },
+  "keywords": [
+    "comic",
+    "manga",
+    "translator",
+    "ocr",
+    "ai",
+    "translation",
+    "react",
+    "node.js",
+    "chrome-extension"
+  ],
+  "author": "Your Name <opikadash@gmail.com>",
+  "license": "MIT"
+}

@@ -1,0 +1,14 @@
+setup:
+  addons:
+    - plan: heroku-redis:mini
+  config:
+    NODE_ENV: production
+    
+build:
+  docker:
+    web: docker/Dockerfile.backend
+    
+release:
+  image: web
+  command:
+    - node scripts/migrate.js
