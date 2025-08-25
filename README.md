@@ -38,8 +38,8 @@ A full-stack application that instantly translates comics and manga using AI-pow
 
 ### 1. Clone and Setup
 ```bash
-git clone https://github.com/your-username/comic-translator.git
-cd comic-translator
+git clone https://github.com/Opikadash/Inkverta.git
+cd Inkverta
 npm run setup
 ```
 
