@@ -121,6 +121,9 @@ OpenAPI spec is served at `GET /api/openapi.yaml` (and is also available at `bac
 - `POST /api/translate/batch` - Batch translation
 - `GET /api/translate/languages` - Get supported languages
 
+### URL Import Endpoints
+- `POST /api/url/ingest` - Ingest a page URL (extract images + text blocks)
+
 ### Health Endpoints
 - `GET /api/health` - Application health status
 - `GET /api/health/ready` - Readiness probe

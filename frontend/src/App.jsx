@@ -4,6 +4,7 @@ import { Toaster } from 'react-hot-toast';
 
 import TranslatePage from './pages/TranslatePage';
 import TextTranslatePage from './pages/TextTranslatePage';
+import LinkTranslatePage from './pages/LinkTranslatePage';
 
 const Nav = () => {
   const location = useLocation();
@@ -26,6 +27,12 @@ const Nav = () => {
           >
             Novel/Text
           </Link>
+          <Link
+            to="/link"
+            className={isActive('/link') ? 'text-blue-600 font-medium' : 'text-gray-600'}
+          >
+            Link Import
+          </Link>
         </nav>
       </div>
     </header>
@@ -40,6 +47,7 @@ const App = () => {
         <Route path="/" element={<Navigate to="/translate" replace />} />
         <Route path="/translate" element={<TranslatePage />} />
         <Route path="/text" element={<TextTranslatePage />} />
+        <Route path="/link" element={<LinkTranslatePage />} />
         <Route path="*" element={<Navigate to="/translate" replace />} />
       </Routes>
 

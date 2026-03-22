@@ -14,6 +14,7 @@ const healthRoutes = require('./src/routes/health');
 const uploadRoutes = require('./src/routes/upload');
 const translateRoutes = require('./src/routes/translate');
 const ocrRoutes = require('./src/routes/ocr');
+const urlRoutes = require('./src/routes/url');
 const { createDirectories, getUploadDir } = require('./src/utils/fileManager');
 
 const app = express();
@@ -94,6 +95,7 @@ app.use('/api/health', healthRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/translate', translateRoutes);
 app.use('/api/ocr', ocrRoutes);
+app.use('/api/url', urlRoutes);
 
 app.get('/api/openapi.yaml', (req, res) => {
   res.sendFile(path.join(__dirname, 'openapi.yaml'));
