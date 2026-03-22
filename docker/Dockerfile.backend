@@ -20,6 +20,7 @@ COPY package*.json ./
 RUN npm ci && npm cache clean --force
 
 COPY . .
+RUN if [ ! -f /app/server.js ] && [ -f /app/backend/server.js ]; then ln -s /app/backend/server.js /app/server.js; fi
 RUN mkdir -p uploads temp logs
 
 EXPOSE 3001
@@ -31,6 +32,7 @@ COPY package*.json ./
 RUN npm ci --omit=dev && npm cache clean --force
 
 COPY . .
+RUN if [ ! -f /app/server.js ] && [ -f /app/backend/server.js ]; then ln -s /app/backend/server.js /app/server.js; fi
 RUN mkdir -p uploads temp logs
 
 RUN addgroup -g 1001 -S nodejs && adduser -S nodejs -u 1001

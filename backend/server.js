@@ -113,6 +113,15 @@ app.use('*', (req, res) => {
 });
 
 if (require.main === module) {
+  process.on('unhandledRejection', (reason) => {
+    logger.error('Unhandled rejection', { reason });
+  });
+
+  process.on('uncaughtException', (error) => {
+    logger.error('Uncaught exception', { error: error?.message, stack: error?.stack });
+    process.exit(1);
+  });
+
   const server = app.listen(PORT, () => {
     logger.info(
       `Server running on port ${PORT} in ${process.env.NODE_ENV || 'development'} mode`,

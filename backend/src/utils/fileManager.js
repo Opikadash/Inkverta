@@ -2,7 +2,12 @@ const fs = require('fs-extra');
 const path = require('path');
 const logger = require('./logger');
 
-const getBaseDir = () => path.join(__dirname, '../../');
+const getBaseDir = () => {
+  if (process.env.APP_ROOT) return path.resolve(process.env.APP_ROOT);
+  // Prefer process CWD so monorepo deployments (e.g. Railway building from repo root)
+  // can still place runtime dirs in a predictable location.
+  return process.cwd();
+};
 
 const getUploadDir = () => {
   return process.env.UPLOAD_DIR
