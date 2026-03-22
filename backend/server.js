@@ -14,13 +14,11 @@ const healthRoutes = require('./src/routes/health');
 const uploadRoutes = require('./src/routes/upload');
 const translateRoutes = require('./src/routes/translate');
 const ocrRoutes = require('./src/routes/ocr');
-const { createDirectories } = require('./src/utils/fileManager');
+const { createDirectories, getUploadDir } = require('./src/utils/fileManager');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
-const uploadDir = process.env.UPLOAD_DIR
-  ? path.resolve(process.env.UPLOAD_DIR)
-  : path.join(__dirname, 'uploads');
+const uploadDir = getUploadDir();
 
 if (process.env.NODE_ENV === 'production') {
   // Needed for correct IP detection behind reverse proxies (rate limiting, logs)

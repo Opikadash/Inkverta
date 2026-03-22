@@ -1,8 +1,8 @@
 services:
   backend:
     build:
-      context: ../backend
-      dockerfile: ../docker/Dockerfile.backend
+      context: ..
+      dockerfile: docker/Dockerfile.backend
     container_name: comic-translator-backend
     ports:
       - "3001:3001"

@@ -4,12 +4,7 @@ const fs = require('fs-extra');
 const { v4: uuidv4 } = require('uuid');
 const sharp = require('sharp');
 const logger = require('../utils/logger');
-
-const getUploadDir = () => {
-  return process.env.UPLOAD_DIR
-    ? path.resolve(process.env.UPLOAD_DIR)
-    : path.join(__dirname, '../../uploads');
-};
+const { getUploadDir } = require('../utils/fileManager');
 
 const storage = multer.diskStorage({
   destination: async (req, file, cb) => {

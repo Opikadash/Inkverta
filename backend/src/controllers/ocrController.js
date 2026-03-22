@@ -4,12 +4,7 @@ const fs = require('fs-extra');
 const logger = require('../utils/logger');
 const { preprocessImage } = require('../services/imagePreprocessor');
 const { validateOcrRequest } = require('../utils/validation');
-
-const getUploadDir = () => {
-  return process.env.UPLOAD_DIR
-    ? path.resolve(process.env.UPLOAD_DIR)
-    : path.join(__dirname, '../../uploads');
-};
+const { getUploadDir } = require('../utils/fileManager');
 
 const extractText = async (req, res, next) => {
   try {

@@ -16,11 +16,10 @@ RUN apk add --no-cache \
 
 FROM base as development
 
-COPY package*.json ./
-RUN npm ci && npm cache clean --force
-
-COPY . .
-RUN if [ ! -f /app/server.js ] && [ -f /app/backend/server.js ]; then ln -s /app/backend/server.js /app/server.js; fi
+WORKDIR /app/backend
+COPY backend/package*.json ./
+RUN if [ -f package-lock.json ]; then npm ci; else npm install; fi && npm cache clean --force
+COPY backend/ ./
 RUN mkdir -p uploads temp logs
 
 EXPOSE 3001
@@ -28,11 +27,10 @@ CMD ["npm", "run", "dev"]
 
 FROM base as production
 
-COPY package*.json ./
-RUN npm ci --omit=dev && npm cache clean --force
-
-COPY . .
-RUN if [ ! -f /app/server.js ] && [ -f /app/backend/server.js ]; then ln -s /app/backend/server.js /app/server.js; fi
+WORKDIR /app/backend
+COPY backend/package*.json ./
+RUN if [ -f package-lock.json ]; then npm ci --omit=dev; else npm install --omit=dev; fi && npm cache clean --force
+COPY backend/ ./
 RUN mkdir -p uploads temp logs
 
 RUN addgroup -g 1001 -S nodejs && adduser -S nodejs -u 1001
