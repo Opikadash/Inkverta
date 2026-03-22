@@ -1,0 +1,165 @@
+openapi: 3.0.3
+info:
+  title: Comic Translator API
+  version: 1.0.0
+  description: OCR + translation API for comics/manga/novels.
+servers:
+  - url: http://localhost:3001
+paths:
+  /api/health:
+    get:
+      summary: Health check
+      responses:
+        "200":
+          description: Healthy
+  /api/health/ready:
+    get:
+      summary: Readiness check
+      responses:
+        "200":
+          description: Ready
+  /api/upload/single:
+    post:
+      summary: Upload a single image
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [image]
+              properties:
+                image:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: Upload success
+  /api/upload/multiple:
+    post:
+      summary: Upload multiple images
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [images]
+              properties:
+                images:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        "200":
+          description: Upload success
+  /api/ocr/extract:
+    post:
+      summary: Extract text from uploaded image
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [filename]
+              properties:
+                filename:
+                  type: string
+                language:
+                  type: string
+                preprocess:
+                  type: boolean
+      responses:
+        "200":
+          description: OCR result
+  /api/ocr/batch:
+    post:
+      summary: Extract text from multiple uploaded images
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [filenames]
+              properties:
+                filenames:
+                  type: array
+                  items:
+                    type: string
+                language:
+                  type: string
+                preprocess:
+                  type: boolean
+      responses:
+        "200":
+          description: Batch OCR results
+  /api/translate:
+    post:
+      summary: Translate plain text (novels, OCR output)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [text, targetLang]
+              properties:
+                text:
+                  type: string
+                sourceLang:
+                  type: string
+                targetLang:
+                  type: string
+                service:
+                  type: string
+                  enum: [google, deepl]
+      responses:
+        "200":
+          description: Translation result
+  /api/translate/batch:
+    post:
+      summary: Translate multiple texts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [texts, targetLang]
+              properties:
+                texts:
+                  type: array
+                  items:
+                    type: string
+                sourceLang:
+                  type: string
+                targetLang:
+                  type: string
+                service:
+                  type: string
+                  enum: [google, deepl]
+      responses:
+        "200":
+          description: Batch translation results
+  /api/translate/languages:
+    get:
+      summary: Supported languages for a translation service
+      parameters:
+        - in: query
+          name: service
+          schema:
+            type: string
+            enum: [google, deepl]
+      responses:
+        "200":
+          description: Language map
+  /api/openapi.yaml:
+    get:
+      summary: Download OpenAPI spec
+      responses:
+        "200":
+          description: OpenAPI YAML
+

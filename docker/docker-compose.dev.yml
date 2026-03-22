@@ -1,0 +1,49 @@
+services:
+  backend:
+    build:
+      context: ../backend
+      dockerfile: ../docker/Dockerfile.backend
+      target: development
+    container_name: comic-translator-backend-dev
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=development
+      - PORT=3001
+      - FRONTEND_URL=http://localhost:3000
+      - GOOGLE_TRANSLATE_API_KEY=${GOOGLE_TRANSLATE_API_KEY}
+      - DEEPL_API_KEY=${DEEPL_API_KEY}
+    volumes:
+      - ../backend:/app
+      - /app/node_modules
+      - backend_uploads_dev:/app/uploads
+    networks:
+      - comic-translator-dev
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: ../docker/Dockerfile.frontend
+      target: development
+    container_name: comic-translator-frontend-dev
+    ports:
+      - "3000:3000"
+    environment:
+      - VITE_API_URL=http://localhost:3001
+    volumes:
+      - ../frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    networks:
+      - comic-translator-dev
+    restart: unless-stopped
+
+volumes:
+  backend_uploads_dev:
+    driver: local
+
+networks:
+  comic-translator-dev:
+    driver: bridge

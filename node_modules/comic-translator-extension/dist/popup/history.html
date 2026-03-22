@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Comic Translator - History</title>
+    <link rel="stylesheet" href="popup.css" />
+    <style>
+      body {
+        width: auto;
+        min-width: 360px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="popup-container" style="width: auto">
+      <header class="popup-header">
+        <h1 class="popup-title">
+          <img src="../icons/icon32.png" alt="Comic Translator" class="popup-icon" />
+          History
+        </h1>
+      </header>
+
+      <main class="popup-main">
+        <p style="margin: 0 0 12px 0; color: #6b7280">
+          This build tracks basic counters locally. Full history UI can be added later.
+        </p>
+        <div class="stats-section">
+          <div class="stat-item">
+            <span class="stat-label">Translations Today:</span>
+            <span class="stat-value" id="translations-today">0</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Total Translations:</span>
+            <span class="stat-value" id="total-translations">0</span>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      (async () => {
+        const stats = await chrome.storage.local.get([
+          'translationsToday',
+          'totalTranslations',
+          'lastDate',
+        ]);
+        const today = new Date().toDateString();
+        const translationsToday = stats.lastDate === today ? stats.translationsToday || 0 : 0;
+        document.getElementById('translations-today').textContent = translationsToday;
+        document.getElementById('total-translations').textContent = stats.totalTranslations || 0;
+      })();
+    </script>
+  </body>
+</html>
+

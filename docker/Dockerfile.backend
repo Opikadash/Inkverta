@@ -1,0 +1,45 @@
+FROM node:18-alpine as base
+
+WORKDIR /app
+
+RUN apk add --no-cache \
+    curl \
+    cairo-dev \
+    pango-dev \
+    libjpeg-turbo-dev \
+    giflib-dev \
+    librsvg-dev \
+    pixman-dev \
+    python3 \
+    make \
+    g++
+
+FROM base as development
+
+COPY package*.json ./
+RUN npm ci && npm cache clean --force
+
+COPY . .
+RUN mkdir -p uploads temp logs
+
+EXPOSE 3001
+CMD ["npm", "run", "dev"]
+
+FROM base as production
+
+COPY package*.json ./
+RUN npm ci --omit=dev && npm cache clean --force
+
+COPY . .
+RUN mkdir -p uploads temp logs
+
+RUN addgroup -g 1001 -S nodejs && adduser -S nodejs -u 1001
+RUN chown -R nodejs:nodejs /app
+USER nodejs
+
+EXPOSE 3001
+
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost:3001/api/health || exit 1
+
+CMD ["node", "server.js"]
