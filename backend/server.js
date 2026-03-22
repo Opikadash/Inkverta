@@ -120,7 +120,7 @@ if (require.main === module) {
     process.exit(1);
   });
 
-  const server = app.listen(PORT, () => {
+  const server = app.listen(PORT, '0.0.0.0', () => {
     logger.info(
       `Server running on port ${PORT} in ${process.env.NODE_ENV || 'development'} mode`,
     );
