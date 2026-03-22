@@ -27,7 +27,7 @@ const FileUpload = ({
     getInputProps,
     isDragActive,
     isDragReject,
-    rejectedFiles
+    fileRejections = []
   } = useDropzone({
     onDrop,
     accept: acceptedFiles.reduce((acc, type) => ({
@@ -120,13 +120,13 @@ const FileUpload = ({
         </div>
       </motion.div>
 
-      {rejectedFiles.length > 0 && (
+      {fileRejections.length > 0 && (
         <div className="mt-4 p-4 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
           <h4 className="font-medium text-red-800 dark:text-red-200 mb-2">
             Rejected files:
           </h4>
           <ul className="text-sm text-red-600 dark:text-red-300 space-y-1">
-            {rejectedFiles.map(({ file, errors }) => (
+            {fileRejections.map(({ file, errors }) => (
               <li key={file.name} className="flex items-center">
                 <DocumentIcon className="h-4 w-4 mr-2 flex-shrink-0" />
                 <span className="font-medium mr-2">{file.name}</span>
