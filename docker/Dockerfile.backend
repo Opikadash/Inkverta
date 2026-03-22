@@ -1,7 +1,8 @@
-FROM node:18-alpine as base
+FROM node:18-alpine
 
 WORKDIR /app
 
+# Install system dependencies for image processing
 RUN apk add --no-cache \
     curl \
     cairo-dev \
@@ -14,25 +15,18 @@ RUN apk add --no-cache \
     make \
     g++
 
-FROM base as development
+# Monorepo root install (uses root package-lock.json)
+COPY package*.json ./
+RUN npm ci --omit=dev && npm cache clean --force
 
+# Copy full repo (includes backend/)
+COPY . .
+
+# Run the backend from its folder
 WORKDIR /app/backend
-COPY backend/package*.json ./
-RUN if [ -f package-lock.json ]; then npm ci; else npm install; fi && npm cache clean --force
-COPY backend/ ./
 RUN mkdir -p uploads temp logs
 
-EXPOSE 3001
-CMD ["npm", "run", "dev"]
-
-FROM base as production
-
-WORKDIR /app/backend
-COPY backend/package*.json ./
-RUN if [ -f package-lock.json ]; then npm ci --omit=dev; else npm install --omit=dev; fi && npm cache clean --force
-COPY backend/ ./
-RUN mkdir -p uploads temp logs
-
+# Create non-root user
 RUN addgroup -g 1001 -S nodejs && adduser -S nodejs -u 1001
 RUN chown -R nodejs:nodejs /app
 USER nodejs
