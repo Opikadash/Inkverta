@@ -4,6 +4,7 @@ WORKDIR /app
 
 # Install system dependencies for image processing
 RUN apk add --no-cache \
+    curl \
     cairo-dev \
     pango-dev \
     libjpeg-turbo-dev \
@@ -18,12 +19,13 @@ RUN apk add --no-cache \
 COPY package*.json ./
 
 # Install dependencies
-RUN npm ci --only=production && npm cache clean --force
+RUN if [ -f package-lock.json ]; then npm ci --omit=dev; else npm install --omit=dev; fi && npm cache clean --force
 
 # Copy source code
 COPY . .
 
-# Create necessary directories
+# Run the backend from its folder
+WORKDIR /app/backend
 RUN mkdir -p uploads temp logs
 
 # Create non-root user
