@@ -1,0 +1,31 @@
+## dependencies
+node_modules/
+**/node_modules/
+
+## production builds
+frontend/dist/
+chrome-extension/dist/
+chrome-extension/package/
+
+## logs
+backend/logs/
+**/*.log
+
+## runtime data
+backend/uploads/
+backend/temp/
+
+## env files
+.env
+backend/.env
+frontend/.env
+
+## OS / tooling
+.DS_Store
+Thumbs.db
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.vercel/
+.railway/
+
