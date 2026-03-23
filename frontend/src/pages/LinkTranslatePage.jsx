@@ -152,8 +152,7 @@ const LinkTranslatePage = () => {
               {(result.images || []).slice(0, 24).map((img) => (
                 <div key={img} className="flex items-center gap-3">
                   <div className="h-14 w-14 rounded bg-gray-100 overflow-hidden border border-gray-200 flex-shrink-0">
-                    {/* eslint-disable-next-line jsx-a11y/alt-text */}
-                    <img src={img} className="h-full w-full object-cover" />
+                    <img src={img} alt="" className="h-full w-full object-cover" />
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="truncate text-xs text-gray-700">{img}</div>
@@ -227,4 +226,3 @@ const LinkTranslatePage = () => {
 };
 
 export default LinkTranslatePage;
-
