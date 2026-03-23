@@ -37,10 +37,10 @@ app.use(helmet());
 const parseCorsOrigins = () => {
   const origins = new Set();
 
-  if (process.env.FRONTEND_URL) origins.add(process.env.FRONTEND_URL);
+  if (process.env.FRONTEND_URL) origins.add(String(process.env.FRONTEND_URL).trim().toLowerCase());
   if (process.env.CORS_ORIGINS) {
     for (const origin of process.env.CORS_ORIGINS.split(',').map((o) => o.trim()).filter(Boolean)) {
-      origins.add(origin);
+      origins.add(origin.toLowerCase());
     }
   }
 
@@ -54,8 +54,9 @@ app.use(
   cors({
     origin: (origin, cb) => {
       if (!origin) return cb(null, true);
-      if (allowedOrigins.has(origin)) return cb(null, true);
-      if (origin.startsWith('chrome-extension://')) return cb(null, true);
+      const normalizedOrigin = origin.toLowerCase();
+      if (allowedOrigins.has(normalizedOrigin)) return cb(null, true);
+      if (normalizedOrigin.startsWith('chrome-extension://')) return cb(null, true);
       return cb(new Error('Not allowed by CORS'));
     },
     credentials: true,
